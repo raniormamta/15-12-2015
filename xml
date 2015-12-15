@@ -1,0 +1,549 @@
+package SAXPARSER;
+
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.helpers.DefaultHandler;
+
+public class ReadingXMLFile {
+	
+	private String tempVal;
+	private String tempValu;
+	private String tempValue;
+	private String tempUom;
+	private List<AppBean> list = new ArrayList<AppBean>();
+	public List<AppBean> getAppList() {
+		return list;
+	}
+	AppBean app; 
+	private void parseDocument(){
+		SAXParserFactory factory = SAXParserFactory.newInstance();
+	try {
+			
+			
+			SAXParser saxParser = factory.newSAXParser();
+			
+			
+			DefaultHandler handler = new DefaultHandler() {
+				FooterBean footer = null;
+				HeaderBean header = null;
+				AppBean app = null;
+/*
+				@Override
+				public void startDocument() throws SAXException {
+					
+				}
+
+				@Override
+				public void endDocument() throws SAXException {
+					
+				}
+*/
+				@Override
+				public void startElement(String uri, String localName,
+						String qName, Attributes attributes)
+						throws SAXException {
+					//reset
+					tempVal = "";
+					//System.out.println("Start Element"+qName);
+					if(qName.equalsIgnoreCase("Footer")){
+						footer = new FooterBean();
+					}
+					
+					if (qName.equalsIgnoreCase("Header")) {
+						// create a new instance of employee
+						header = new HeaderBean();
+						// header.setType(attributes.getValue("type"));
+					}
+					if (qName.equalsIgnoreCase("App")) {
+						// create a new instance of employee
+						tempValu = "";
+						tempValue = "";
+						tempUom = "";
+						app = new AppBean();
+						app.setId(Long.parseLong(attributes.getValue("id")));
+						app.setAction(attributes.getValue("action"));
+						app.setValidate(attributes.getValue("validate"));
+						app.setRef(attributes.getValue("ref"));
+					}
+					if (qName.equalsIgnoreCase("BaseVehicle")) {
+						String id = attributes.getValue("id");
+						app.setBaseVehicleId(Long.parseLong(id));
+					}
+					if (qName.equalsIgnoreCase("EngineBase")) {
+						app.setEngineBaseId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("EngineDesignation")) {
+						app.setEngineDesignationId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("FuelDeliverySubType")) {
+						app.setFuelDeliverySubTypeId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("Note")) {
+						String id = attributes.getValue("id");
+						if (id != null) {
+							app.setNoteId(Long.parseLong(id));
+						}
+						String lang = attributes.getValue("lang");
+						if (lang != null) {
+							app.setNoteLang(lang);
+						}
+					}
+					if (qName.equalsIgnoreCase("Part")) {
+						app.setPartBrandAAIAId(attributes.getValue("BrandAAIAID"));
+					}
+					if (qName.equalsIgnoreCase("Aspiration")) {
+						app.setAspirationId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("BedLength")) {
+						app.setBedLengthId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("BedType")) {
+						app.setBedTypeId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("BodyNumDoors")) {
+						app.setBodyNumDoorsId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("BodyType")) {
+						app.setBodyTypeId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("BrakeABS")) {
+						app.setBrakeABSId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("BrakeSystem")) {
+						app.setBrakeSystemId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("CylinderHeadType")) {
+						app.setCylinderHeadTypeId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("DriveType")) {
+						app.setDriveTypeId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("EngineMfr")) {
+						app.setEngineMfrId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("EngineVersion")) {
+						app.setEngineVersionId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("EngineVIN")) {
+						app.setEngineVINId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("FrontBrakeType")) {
+						app.setFrontBrakeTypeId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("FrontSpringType")) {
+						app.setFrontSpringTypeId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("FuelDeliverySubType")) {
+						app.setFuelDeliverySubTypeId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("FuelDeliveryType")) {
+						app.setFuelDeliveryTypeId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("FuelSystemControlType")) {
+						app.setFuelSystemControlTypeId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("FuelSystemDesign")) {
+						app.setFuelSystemDesignId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("FuelType")) {
+						app.setFuelTypeId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("IgnitionSystemType")) {
+						app.setIgnitionSystemTypeId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("Make")) {
+						app.setMakeId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("MfrBodyCode")) {
+						app.setMfrBodyCodeId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("Model")) {
+						app.setModelId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("PowerOutput")) {
+						app.setPowerOutputId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("RearBrakeType")) {
+						app.setRearBrakeTypeId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("RearSpringType")) {
+						app.setRearSpringTypeId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("Region")) {
+						app.setRegionId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("SteeringType")) {
+						app.setSteeringTypeId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("SteeringSystem")) {
+						app.setSteeringSystemId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("SubModel")) {
+						app.setSubModelId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("TransElecControlled")) {
+						app.setTransElecContolledId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("TransmissionMfr")) {
+						app.setTransmissionMfrId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("TransmissionMfrCode")) {
+						app.setTransmissionMfrCodeId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("TransmissionBase")) {
+						app.setTransmissionBaseId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("TransmissionControlType")) {
+						app.setTransmissionControlTypeId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("TransmissionNumSpeeds")) {
+						app.setTransmissionNumSpeedsId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("TransmissionType")) {
+						app.setTransmissionTypeId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("ValvesPerEngine")) {
+						app.setValvesPerEngineId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("VehicleType")) {
+						app.setVehicleTypeId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("WheelBase")) {
+						app.setWheelBaseId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("Years")) {
+						app.setYearsFrom(attributes.getValue("from"));
+						app.setYearsTo(attributes.getValue("to"));
+					}
+					if (qName.equalsIgnoreCase("PartType")) {
+						app.setPartTypeId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("Qual")) {
+						app.setQualId(Long.parseLong(attributes.getValue("id")));
+					}
+					if (qName.equalsIgnoreCase("Param")) {
+							String value = attributes.getValue("value");
+							if (value != null) {
+								app.setqParamValue(value + "" + tempValue);
+								tempValue = tempValue + ", " + value;
+							}
+					
+							String uom = attributes.getValue("uom");
+							if (uom != null) {
+								app.setqParamUom(uom + "" + tempUom);
+								tempUom = tempUom + ", " + uom;
+							}
+							
+							String altvalue = attributes.getValue("altvalue");
+							if (altvalue != null) {
+								app.setqParamAltValue(altvalue);
+							}
+							String altuom = attributes.getValue("altuom");
+							if (altuom != null) {
+								app.setqParamAltUom(altuom);
+							}
+					}
+					 if (qName.equalsIgnoreCase("Position")) {
+						app.setPosition(tempVal);
+						app.setPositionId(Long.parseLong(attributes.getValue("id")));
+					}
+					 if (qName.equalsIgnoreCase("Asset")) {
+							String action=attributes.getValue("action");
+							
+							app.setAssetAction(action);
+							String id=attributes.getValue("id");
+							app.setAssetId(Long.parseLong(id));
+							
+							String ref=attributes.getValue("ref");  // =====  
+							if(ref!=null && !ref.equalsIgnoreCase("")){
+							app.setAssetRef(ref);}
+							
+							String validate=attributes.getValue("validate");
+							app.setAssetValidate(validate);
+							
+							
+						}
+				}
+
+				@Override
+				public void endElement(String uri, String localName,
+						String qName) throws SAXException {
+					if(qName.equalsIgnoreCase("Footer")){
+						new DBDao().saveFooterRecord(footer);
+					} else if(qName.equalsIgnoreCase("RecordCount")){
+						footer.setRecordCount(Long.parseLong(tempVal));	
+					}
+					
+					if (qName.equalsIgnoreCase("Header")) {
+						new DBDao().saveHeaderRecord(header);
+					} else if (qName.equalsIgnoreCase("Company")) {
+						header.setCompany(tempVal);
+					} else if (qName.equalsIgnoreCase("SenderName")) {
+						header.setSenderName(tempVal);
+					} else if (qName.equalsIgnoreCase("SenderPhone")) {
+						header.setSenderPhone(tempVal);
+					} else if (qName.equalsIgnoreCase("TransferDate")) {
+						header.setTransferDate(tempVal);
+					} else if (qName.equalsIgnoreCase("BrandAAIAID")) {
+						header.setBrandAAIAID(tempVal);
+					} else if (qName.equalsIgnoreCase("DocumentTitle")) {
+						header.setDocumentTitle(tempVal);
+					} else if (qName.equalsIgnoreCase("EffectiveDate")) {
+						header.setEffectiveDate(tempVal);
+					} else if (qName.equalsIgnoreCase("SubmissionType")) {
+						header.setSubmissionType(tempVal);
+					} else if (qName.equalsIgnoreCase("MapperCompany")) {
+						header.setMapperCompany(tempVal);
+					} else if (qName.equalsIgnoreCase("MapperContact")) {
+						header.setMapperContact(tempVal);
+					} else if (qName.equalsIgnoreCase("MapperPhone")) {
+						header.setMapperPhone(tempVal);
+					} else if (qName.equalsIgnoreCase("MapperEmail")) {
+						header.setMapperEmail(tempVal);
+					} else if (qName.equalsIgnoreCase("VcdbVersionDate")) {
+						header.setVcdbVersionDate(tempVal);
+					} else if (qName.equalsIgnoreCase("QdbVersionDate")) {
+						header.setQdbVersionDate(tempVal);
+					} else if (qName.equalsIgnoreCase("PcdbVersionDate")) {
+						header.setPcdbVersionDate(tempVal);
+					} else if (qName.equalsIgnoreCase("ApprovedFor")) {
+						header.setApprovedFor(tempVal);
+					} else if (qName.equalsIgnoreCase("DocFormNumber")) {
+						header.setDocFormNumber(tempVal);
+					} else if (qName.equalsIgnoreCase("MapperPhoneExt")) {
+						header.setMapperPhoneExt(tempVal);
+					} else if (qName.equalsIgnoreCase("SenderPhoneExt")) {
+						header.setSenderPhoneExt(tempVal);
+					}
+					
+					if (qName.equalsIgnoreCase("App")) {
+						// add it to the list
+						list.add(app);
+						//new DBDao().saveAppListRecord(list);
+						if((list.size()  == 10000)){
+							new DBDao().saveAppListRecord(list);
+							list.clear();
+						}else if(DBDao.counter >= 2640000){
+							new DBDao().saveAppListRecord(list);
+							list.clear();
+						}/*else//(DBDao.counter >=50000){
+							{new DBDao().saveAppListRecord(list);
+							list.clear();
+						}*/
+						/*else if(DBDao.counter >= 50000) {
+							new DBDao().saveAppListRecord(list);
+							list.clear();
+						}
+					*/
+					} else if (qName.equalsIgnoreCase("id")) {
+						app.setId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("action")) {
+						app.setAction(tempVal);
+					} else if (qName.equalsIgnoreCase("validate")) {
+						app.setValidate(tempVal);
+					} else if (qName.equalsIgnoreCase("ref")) {
+						app.setRef(tempVal);
+					} else if (qName.equalsIgnoreCase("Note")) {
+						app.setNote(tempValu + " " + tempVal);
+						tempValu = tempValu + tempVal;
+					} else if (qName.equalsIgnoreCase("Note lang")) {
+						app.setNoteLang(tempVal);
+					} else if (qName.equalsIgnoreCase("Qty")) {
+						app.setQty(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("PartType")) {
+						app.setPartType(tempVal);
+					} else if (qName.equalsIgnoreCase("PartType id")) {
+						app.setPartTypeId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("Part BrandAAIAID")) {
+						app.setPartBrandAAIAId(tempVal);
+					} else if(qName.equalsIgnoreCase("Aspiration")) {
+						app.setAspiration(tempVal);
+					} else if (qName.equalsIgnoreCase("BedLength id")) {
+						app.setBedLengthId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("BedType id")) {
+						app.setBedTypeId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("BodyNumDoors id")) {
+						app.setBodyNumDoorsId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("BodyType id")) {
+						app.setBodyTypeId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("BrakeABS id")) {
+						app.setBrakeABSId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("BrakeSystem id")) {
+						app.setBrakeSystemId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("CylinderHeadType id")) {
+						app.setCylinderHeadTypeId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("DriveType")) {
+						app.setDriveType(tempVal);
+					} else if (qName.equalsIgnoreCase("EngineMfr id")) {
+						app.setEngineMfrId(Long.parseLong(tempVal));
+					} else if(qName.equalsIgnoreCase("EngineVersion")) {
+						app.setEngineVersion(tempVal);
+					} else if(qName.equalsIgnoreCase("EngineVIN")) {
+						 app.setEngineVIN(tempVal);
+					} else if (qName.equalsIgnoreCase("FrontBrakeType id")) {
+						app.setFrontBrakeTypeId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("FrontSpringType id")) {
+						app.setFrontSpringTypeId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("FuelDeliveryType id")) {
+						app.setFuelDeliveryTypeId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("FuelSystemControlType id")) {
+						app.setFuelSystemControlTypeId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("FuelSystemDesign id")) {
+						app.setFuelSystemDesignId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("FuelType id")) {
+						app.setFuelTypeId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("IgnitionSystemType id")) {
+						app.setIgnitionSystemTypeId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("Make id")) {
+						app.setMakeId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("MfrBodyCode id")) {
+						app.setMfrBodyCodeId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("Model id")) {
+						app.setModelId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("PowerOutput id")) {
+						app.setPowerOutputId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("RearBrakeType id")) {
+						app.setRearBrakeTypeId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("RearSpringType id")) {
+						app.setRearSpringTypeId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("Region id")) {
+						app.setRegionId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("SteeringType id")) {
+						app.setSteeringTypeId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("SteeringSystem id")) {
+						app.setSteeringSystemId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("SubModel")) {
+						app.setSubModel(tempVal);
+					}  else if (qName.equalsIgnoreCase("TransElecControlled id")) {
+						app.setTransElecContolledId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("TransmissionMfr id")) {
+						app.setTransmissionMfrId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("TransmissionMfrCode id")) {
+						app.setTransmissionMfrCodeId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("TransmissionBase id")) {
+						app.setTransmissionBaseId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("TransmissionControlType id")) {
+						app.setTransmissionControlTypeId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("TransmissionNumSpeeds id")) {
+						app.setTransmissionNumSpeedsId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("TransmissionType id")) {
+						app.setTransmissionTypeId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("ValvesPerEngine id")) {
+						app.setValvesPerEngineId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("VehicleType id")) {
+						app.setVehicleTypeId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("WheelBase id")) {
+						app.setWheelBaseId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("from")) {
+						app.setYearsFrom(tempVal);
+					} else if (qName.equalsIgnoreCase("to")) {
+						app.setYearsTo(tempVal);
+					} else if(qName.equalsIgnoreCase("Position")) {
+						app.setPosition(tempVal);
+					} else if (qName.equalsIgnoreCase("Position id")) {
+						app.setPositionId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("Part")) {
+						app.setPart(tempVal);
+					} else if (qName.equalsIgnoreCase("BaseVehicle")) {
+						app.setBaseVehicle(tempVal);
+					} else if (qName.equalsIgnoreCase("EngineBase")) {
+						app.setEngineBase(tempVal);
+					} else if (qName.equalsIgnoreCase("EngineDesignation")) {
+						app.setEngineDesignation(tempVal);
+					} else if (qName.equalsIgnoreCase("FuelDeliverySubType id")) {
+						app.setFuelDeliverySubTypeId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("Note id")) {
+						app.setNoteId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("Note lang")) {
+						app.setNoteLang(tempVal);
+					} else if (qName.equalsIgnoreCase("Qual id")) {
+						app.setQualId(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("text")) {
+						app.setqPText(tempVal);
+					} else if (qName.equalsIgnoreCase("AssetItemOrder")) {
+						app.setAssetItemOrder(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("AssetItemRef")) {
+						app.setAssetItemRef(tempVal);
+					} else if (qName.equalsIgnoreCase("AssetItemName")) {
+						app.setAssetItemName(tempVal);
+					} else if (qName.equalsIgnoreCase("DisplayOrder")) {
+						app.setDisplayOrder(Long.parseLong(tempVal));
+					} else if (qName.equalsIgnoreCase("MfrLabel")) {
+						app.setMfrLabel(tempVal);
+					}
+				}				
+
+				@Override
+				public void characters(char[] ch, int start, int length)
+						throws SAXException {
+					tempVal = new String(ch, start, length);
+				}
+
+				@Override
+				public void warning(SAXParseException e) throws SAXException {
+					super.warning(e);
+				}
+
+				@Override
+				public void error(SAXParseException e) throws SAXException {
+					super.error(e);
+				}
+
+				@Override
+				public void fatalError(SAXParseException e) throws SAXException {
+					super.fatalError(e);
+				}
+				
+				
+			};
+			File folder = new File("E:\\Mamta\\test\\xml");
+			//File folder = new File("D:\\Mamta\\New folder\\mk");
+			//File folder = new File("D:\\Mamta\\New folder\\xml");
+			File[] listOfFiles = folder.listFiles();
+		
+			for (File list : listOfFiles) {
+				//YourClassConstructor(list);
+		
+					System.out.println(list.getName());
+					
+				//System.out.println("App ID : " +app.getId());
+					saxParser.parse(list,handler);
+					
+				
+				//System.out.println("App ID : " +tempApp.getId());
+				}
+			
+			//saxParser.parse("E:\\Mamta\\test\\xml\\ACES_MAHLEOriginal_Filters.xml", handler);
+		//	saxParser.parse("E:\\Mamta\\test\\xml\\Sealed_Power_ACES_FULL_12-28-2014.xml", handler);
+		//	saxParser.parse("E:\\Mamta\\test\\xml\\acesALLTagAndAttributeRead.xml", handler);
+	} catch (Exception e) {
+			e.printStackTrace();
+		}
+}
+
+public void runExample(){
+	parseDocument();
+}
+	
+	public static void main(String argv[]){
+		long startTime = System.nanoTime();
+		ReadingXMLFile rd = new ReadingXMLFile();
+		rd.runExample();
+		long endTime = System.nanoTime();
+		long elapsedTime = startTime - endTime;
+		double seconds = (double)elapsedTime / 1000000000.0;
+		System.out.println("Took "+(endTime - startTime) + " ns");
+		System.out.println("Took "+(int)seconds + " seconds" );
+		}
+}
+
+
